@@ -1,0 +1,7 @@
+create table cliente (
+	idcliente serial,
+	nome varchar,
+	email varchar,
+	primary key (idcliente)
+
+)
