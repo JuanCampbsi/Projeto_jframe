@@ -10,7 +10,17 @@ public class JDCliente {
     public JDCliente(String nome, String email) {
         this.nome = nome;
         this.email = email;
-        
+       
+    }
+     
+    private String Pesquisa;
+
+    public String getPesquisa() {
+        return Pesquisa;
+    }
+
+    public void setPesquisa(String Pesquisa) {
+        this.Pesquisa = Pesquisa;
     }
     
      public JDCliente() {

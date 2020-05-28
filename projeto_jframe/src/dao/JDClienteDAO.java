@@ -1,74 +1,80 @@
 package dao;
 
-import util.JDConnectioFactory;
+import util.Conexao;
 import model.JDCliente;
 import java.sql.*;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class JDClienteDAO {
 
-    private Connection connection;
-    Long codcliente;
-    String nome;
-    String email;
-
-    public JDClienteDAO() {
-        this.connection = new JDConnectioFactory().getConnection();
+    Conexao connecta = new Conexao();//Criando instancia de conexão
+    JDCliente cli = new JDCliente(); //Instanciando a classe ClienteBeans
+    
+    
+    public void Salvar(JDCliente cli){
+      connecta.conexao();
+      try {
+          //responsável por receber a instrução sql  
+          PreparedStatement pst = connecta.con.prepareStatement("Insert into cliente( nome, email) values (?,?)");           
+            pst.setString(1, cli.getNome());
+            pst.setString(2, cli.getEmail());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao inserir dados\n" + ex);        
+      connecta.desconecta();
+    }
     }
     
-    // SELECT - Retorna uma lista com o resultado da consulta
-    public List<JDCliente> getLista(String nome) throws SQLException{
-        // Prepara conexão p/ receber o comando SQL
-        String sql = "SELECT * FROM cliente WHERE nome like ?";
-        PreparedStatement stmt = this.connection.prepareStatement(sql);
-        stmt.setString(1, nome);
-        
-        // Recebe o resultado da consulta SQL
-        ResultSet rs = stmt.executeQuery();
-        
-        List<JDCliente> lista = new ArrayList<>();
-        
-        // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
-        while(rs.next()) {
-            //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-           JDCliente c = new JDCliente();
-            
-            // "c" -> Cliente novo - .setNome recebe o campo do banco de String "nome" 
-            c.setIdcliente(Long.valueOf(rs.getString("idcliente")));
-            c.setNome(rs.getString("nome"));
-            c.setEmail(rs.getString("email"));
-          
-            // Adiciona o registro na lista
-            lista.add(c);            
-        }
-        
-        
-        
-        // Fecha a conexão com o BD
-        rs.close();
-        stmt.close();
-        
-        // Retorna a lista de registros, gerados pela consulta
-        return lista;          
-    }
-
-    public void adiciona(JDCliente cliente) {
-        String sql = "INSERT INTO cliente( nome,email) VALUES(?,?)";
+    public void Editar (JDCliente mod){
+      connecta.conexao();
         try {
-            PreparedStatement stmt;
-        // stmt recebe o comando SQL
-        stmt = this.connection.prepareStatement(sql);
-            
-            stmt.setString(1, cliente.getNome());
-            stmt.setString(2, cliente.getEmail());
-            stmt.execute();
-            stmt.close();
-        } catch (SQLException u) {
-            throw new RuntimeException(u);
+            PreparedStatement pst = connecta.con.prepareStatement("update cliente set  nome=?, email=? where idcliente=?");
+            pst.setString(1, mod.getNome());
+            pst.setString(2, mod.getEmail()); 
+            pst.setLong(3, mod.getIdcliente());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Dados Alterados com sucesso");    
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, "Dados não alterados\n" + ex);     
+        connecta.desconecta();
+        
         }
-    }
+   }
+   
+    
+    public void Excluir (JDCliente mod){
+      connecta.conexao();
+        try {
+            PreparedStatement pst = connecta.con.prepareStatement("delete from cliente where idcliente=?");
+            pst.setLong(1, mod.getIdcliente());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Dados Excluidos com sucesso");    
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, "Dados não excluídos\n" + ex);     
+        connecta.desconecta();
+        
+        }
+   }
+    
+    
+    
+  public JDCliente buscCliente(JDCliente modi){
+    connecta.conexao();
+    connecta.executaSql("Select * from cliente where nome like'%"+modi.getPesquisa()+"%'");
+        try {
+            connecta.rs.first();
+            modi.setIdcliente(connecta.rs.getLong("idcliente"));
+            modi.setNome(connecta.rs.getString("nome"));
+            modi.setEmail(connecta.rs.getString("email"));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao buscar dados na tabela\n" + ex);
+        }
+        connecta.desconecta();
+        return (modi);
+  
+  }
 }
-
-
