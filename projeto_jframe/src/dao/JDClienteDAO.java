@@ -7,21 +7,40 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import model.JDEndereco;
 
 public class JDClienteDAO {
 
     Conexao connecta = new Conexao();//Criando instancia de conexão
-    JDCliente cli = new JDCliente(); //Instanciando a classe ClienteBeans
+    JDCliente cli = new JDCliente(); //Instanciando a classe 
+     JDEndereco cliend = new JDEndereco(); //Instanciando a classe 
     
-    
-    public void Salvar(JDCliente cli){
+    public void Salvar( JDEndereco cliend){
       connecta.conexao();
       try {
-          //responsável por receber a instrução sql  
-          PreparedStatement pst = connecta.con.prepareStatement("Insert into cliente( nome, email) values (?,?)");           
-            pst.setString(1, cli.getNome());
-            pst.setString(2, cli.getEmail());
+         
+          PreparedStatement pst = connecta.con.prepareStatement(" "
+                  + "DO $$" 
+                  + "DECLARE tableId integer ;" 
+                  +"BEGIN "
+                  + "Insert into cliente(idcliente, nome, email) values (DEFAULT, ?, ?)"
+                  +" RETURNING idcliente INTO tableId;"
+                  + "Insert into endereco(idendereco,logradouro, numero, cidade, estado, idcliente) "
+                  + "values (DEFAULT,?,?,?,?,tableId)"
+                  + "END $$ LANGUAGE plpgsql;");     
+        
+          
+            pst.setString(1, cliend.getNome());
+            pst.setString(2, cliend.getEmail());
+            
+          
+            pst.setString(3, cliend.getLogradouro());
+            pst.setInt(4, cliend.getNumero());
+            pst.setString(5, cliend.getCidade());
+            pst.setString(6, cliend.getEstado());                     
+           // pst.setInt(5, cliend.getIdcliente());
             pst.execute();
+           
             JOptionPane.showMessageDialog(null, "Dados inseridos com sucesso");
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao inserir dados\n" + ex);        
@@ -62,19 +81,26 @@ public class JDClienteDAO {
     
     
     
-  public JDCliente buscCliente(JDCliente modi){
+  public JDEndereco buscCliente(JDEndereco modend){
     connecta.conexao();
-    connecta.executaSql("Select * from cliente where nome like'%"+modi.getPesquisa()+"%'");
+    connecta.executaSql("Select * from cliente p inner join cliente es on p.idcliente = es.idcliente"
+                + " where p.nome like'%"+modend.getPesquisa()+"%'");
         try {
             connecta.rs.first();
-            modi.setIdcliente(connecta.rs.getLong("idcliente"));
-            modi.setNome(connecta.rs.getString("nome"));
-            modi.setEmail(connecta.rs.getString("email"));
+            modend.getjDCliente().setIdcliente(connecta.rs.getLong("idcliente"));
+           modend.getjDCliente().setNome(connecta.rs.getString("nome"));
+           modend.getjDCliente().setEmail(connecta.rs.getString("email"));
+            
+             modend.setLogradouro(connecta.rs.getString("logradouro"));
+              modend.setNumero(connecta.rs.getInt("numero"));
+               modend.setCidade(connecta.rs.getString("cidade"));
+                modend.setEstado(connecta.rs.getString("estado"));
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao buscar dados na tabela\n" + ex);
         }
         connecta.desconecta();
-        return (modi);
+        return (modend);
   
   }
 }

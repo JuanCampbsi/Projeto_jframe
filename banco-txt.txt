@@ -5,3 +5,44 @@ create table cliente (
 	primary key (idcliente)
 
 )
+
+CREATE TABLE endereco(
+  idendereco serial PRIMARY KEY,
+  logradouro varchar,
+  numero int,
+  cidade varchar,
+  estado varchar,
+  idcliente serial,
+  CONSTRAINT fkidCliente FOREIGN KEY (idcliente) REFERENCES cliente (idcliente)
+ 
+) 
+
+
+DO $$
+DECLARE tableId integer ;
+BEGIN 
+ INSERT INTO public.cliente(
+            idcliente, nome, email)
+    VALUES (DEFAULT, 'JUAN','JUANS@GMAIL.COM') RETURNING idcliente INTO tableId; 
+    
+   INSERT INTO public.endereco(
+            idendereco, logradouro, numero, cidade, estado,idcliente)
+   values (DEFAULT,'6','2','sa','sa',tableId)  ;
+
+END $$
+
+
+
+  StringBuilder sb = new StringBuilder();
+        sb.append("DO $$\n" );
+         sb.append("DECLARE tableId integer ;\n" );
+          sb.append("BEGIN ");
+           sb.append("Insert into cliente(idcliente, nome, email) values (DEFAULT, ?, ?)" );
+            sb.append(" RETURNING idcliente INTO tableId;" );
+             sb.append( "Insert into endereco(idendereco,logradouro, numero, cidade, estado, idcliente) " );
+              sb.append("values (DEFAULT,?,?,?,?,tableId)");
+               sb.append("END $$" );
+
+
+ERRO ao inserir dados
+org.postgresql.util.PSQLExcepetion: o indíce da coluna está fora do intervalo 1 numero de colunas

@@ -4,23 +4,33 @@ import dao.JDClienteDAO;
 import java.awt.HeadlessException;
 import model.JDCliente;
 import model.JDModeloTabela;
-import java.util.List;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
+import model.JDEndereco;
+
 import util.Conexao;
 import util.JDteclasMas;
-import util.JDteclasMin;
+
 
 public class JDClienteframe extends javax.swing.JFrame {
 
     // Variável que recebe a instância da tela principal
     private JDClienteframe telaCliente;
    Conexao connecta = new Conexao();
-   JDCliente Modcli = new JDCliente();   
+   
+   JDCliente Modcli = new JDCliente();
+   JDEndereco Modend = new JDEndereco();   
+   
+   
    JDClienteDAO contCad = new JDClienteDAO();
+   
+   
     
     
     public JDClienteframe() {
@@ -28,7 +38,7 @@ public class JDClienteframe extends javax.swing.JFrame {
        habilitaCampos();
        
        jT1nome.setDocument(new JDteclasMas());
-       jT2email.setDocument(new JDteclasMin());
+      
        
        desabilitaCampos();
         connecta.conexao();
@@ -63,6 +73,14 @@ public class JDClienteframe extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
+        jT4numero = new javax.swing.JTextField();
+        jT3logradouro = new javax.swing.JTextField();
+        jT6estado = new javax.swing.JTextField();
+        jT5cidade = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Clientes");
@@ -180,29 +198,24 @@ public class JDClienteframe extends javax.swing.JFrame {
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
+        jLabel3.setText("Logradouro:");
+
+        jLabel4.setText("Número:");
+
+        jLabel5.setText("Cidade:");
+
+        jLabel6.setText("Estado:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+            .addComponent(jSeparator1)
+            .addComponent(jSeparator3)
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jT0Id, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jT2email, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jT1nome, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
                         .addComponent(jBInserir, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jBSelecionar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,17 +226,45 @@ public class JDClienteframe extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(jBlimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(scrDados, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel7))
+                                .addGap(42, 42, 42))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, 18)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jT0Id, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT2email, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT1nome, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT4numero, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT3logradouro, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT6estado, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jT5cidade, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(pnlCampos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(scrDados)))
                 .addContainerGap())
-            .addComponent(jSeparator1)
-            .addComponent(jSeparator3)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -240,8 +281,23 @@ public class JDClienteframe extends javax.swing.JFrame {
                                     .addComponent(jT2email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2)))
                             .addComponent(pnlCampos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 24, Short.MAX_VALUE))
-                    .addComponent(jSeparator2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jT3logradouro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jT4numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jT5cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jT6estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 9, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,9 +309,9 @@ public class JDClienteframe extends javax.swing.JFrame {
                     .addComponent(jBlimpar))
                 .addGap(17, 17, 17)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrDados, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
+                .addGap(58, 58, 58))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBAlterar, jBExcluir, jBInserir, jBSelecionar, jBlimpar});
@@ -285,22 +341,37 @@ public class JDClienteframe extends javax.swing.JFrame {
     private void jBInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInserirActionPerformed
     
           try {
+              
+           Modend.setNome(jT1nome.getText());
+             Modend.setEmail(jT2email.getText());
+            
+               
+            Modend.setLogradouro(jT3logradouro.getText());
+            Modend.setNumero(Integer.valueOf(jT4numero.getText()));
+            Modend.setCidade(jT5cidade.getText());
+            Modend.setEstado(jT6estado.getText());
              
-             Modcli.setNome(jT1nome.getText());
-             Modcli.setEmail(jT2email.getText());
-             contCad.Salvar(Modcli);  
-             jT1nome.setText("");
-             jT2email.setText("");             
+            contCad.Salvar( Modend);  
+           
+             
+          jT1nome.setText("");
+           jT2email.setText("");   
+             jT3logradouro.setText("");  
+             jT4numero.setText("");  
+             jT5cidade.setText("");  
+             jT6estado.setText("");  
 
             } catch (HeadlessException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Erro ao cadastrar cliente.");
            }
         
-         preencherTabela("select * from cliente ORDER by nome");
+       preencherTabela(" select * from cliente p\n" +
+        " inner join endereco es on p.idcliente = es.idcliente");
     }//GEN-LAST:event_jBInserirActionPerformed
 
     private void jBSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSelecionarActionPerformed
-        preencherTabela("select * from cliente ORDER by nome");
+        preencherTabela(" select * from cliente p\n" +
+        " inner join endereco es on p.idcliente = es.idcliente");
     }//GEN-LAST:event_jBSelecionarActionPerformed
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
@@ -308,7 +379,8 @@ public class JDClienteframe extends javax.swing.JFrame {
         Modcli.setNome(jT1nome.getText());
        Modcli.setEmail(jT2email.getText());
        contCad.Editar(Modcli);
-       preencherTabela("select * from cliente ORDER by nome");
+       preencherTabela(" select * from cliente p\n" +
+        " inner join endereco es on p.idcliente = es.idcliente");
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
@@ -318,15 +390,26 @@ public class JDClienteframe extends javax.swing.JFrame {
        Modcli.setEmail(jT2email.getText());
        contCad.Excluir(Modcli); 
        limpaCampos();
+        preencherTabela(" select * from cliente p\n" +
+        " inner join endereco es on p.idcliente = es.idcliente");
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void btnPesqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesqActionPerformed
-        Modcli.setPesquisa(txtPesq.getText());
-        JDCliente jdcliente = contCad.buscCliente(Modcli);
-        jT0Id.setText(String.valueOf(jdcliente.getIdcliente()));
-        jT1nome.setText(jdcliente.getNome());
-        jT2email.setText(jdcliente.getEmail());
-        preencherTabela("Select * from cliente where nome like'%"+Modcli.getPesquisa()+"%'");
+        Modend.setPesquisa(txtPesq.getText());
+        JDEndereco jdendereco = contCad.buscCliente(Modend);
+        
+        jT0Id.setText(String.valueOf(jdendereco.getjDCliente().getIdcliente()));
+        jT1nome.setText(jdendereco.getjDCliente().getNome());
+        jT2email.setText(jdendereco.getjDCliente().getEmail());
+        
+        jT3logradouro.setText(jdendereco.getLogradouro());
+         jT4numero.setText(String.valueOf(jdendereco.getNumero()));
+         jT5cidade.setText(jdendereco.getCidade());
+         jT6estado.setText(jdendereco.getEstado());
+        
+        
+        preencherTabela("Select * from cliente p inner join endereco es on p.idcliente = es.idcliente"
+                + " where nome like'%"+Modcli.getPesquisa()+"%'");
     }//GEN-LAST:event_btnPesqActionPerformed
 
     private void txtPesqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesqActionPerformed
@@ -357,13 +440,15 @@ public class JDClienteframe extends javax.swing.JFrame {
 
     public void preencherTabela(String Sql){
         ArrayList dados = new ArrayList();
-        String[] colunas = new String[]{"ID","NOME","EMAIL"};
+        String[] colunas = new String[]{"ID","NOME","EMAIL","LOGRADOURO","NUMERO","CIDADE","ESTADO"};
          connecta.conexao();
         connecta.executaSql(Sql);
         try{
           connecta.rs.first();
           do{
-            dados.add(new Object[]{connecta.rs.getLong("idcliente"),connecta.rs.getString("nome"),connecta.rs.getString("email")});
+            dados.add(new Object[]{connecta.rs.getLong("idcliente"),connecta.rs.getString("nome"),connecta.rs.getString("email")
+            ,connecta.rs.getString("logradouro"),connecta.rs.getInt("numero"),connecta.rs.getString("cidade")
+            ,connecta.rs.getString("estado")});
          }while (connecta.rs.next());
         } catch(SQLException ex){
             JOptionPane.showMessageDialog (rootPane,"Erro ao Preencher ArrayList"+ ex);
@@ -372,10 +457,21 @@ public class JDClienteframe extends javax.swing.JFrame {
         tableDados.setModel(modelo);
         tableDados.getColumnModel().getColumn(0).setPreferredWidth(50);
         tableDados.getColumnModel().getColumn(0).setResizable(false);
-        tableDados.getColumnModel().getColumn(1).setPreferredWidth(235);
+        tableDados.getColumnModel().getColumn(1).setPreferredWidth(200);
         tableDados.getColumnModel().getColumn(1).setResizable(false);
-        tableDados.getColumnModel().getColumn(2).setPreferredWidth(250);
-        tableDados.getColumnModel().getColumn(2).setResizable(false);  //sem alterar o tamanho
+        tableDados.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tableDados.getColumnModel().getColumn(2).setResizable(false); 
+        tableDados.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tableDados.getColumnModel().getColumn(3).setResizable(false);
+        tableDados.getColumnModel().getColumn(4).setPreferredWidth(50);
+        tableDados.getColumnModel().getColumn(4).setResizable(false);
+        tableDados.getColumnModel().getColumn(5).setPreferredWidth(50);
+        tableDados.getColumnModel().getColumn(5).setResizable(false);//sem alterar o tamanho
+        tableDados.getColumnModel().getColumn(6).setPreferredWidth(50);
+        tableDados.getColumnModel().getColumn(6).setResizable(false);
+        tableDados.getColumnModel().getColumn(7).setPreferredWidth(250);
+        tableDados.getColumnModel().getColumn(7).setResizable(false);
+
         tableDados.getTableHeader().setReorderingAllowed(false); //sem reorganizar as colunas
         tableDados.setAutoResizeMode(tableDados.AUTO_RESIZE_OFF);//sem redimensionamento
         //ao tocar na tabela selecionará apena um por vez
@@ -405,6 +501,10 @@ public class JDClienteframe extends javax.swing.JFrame {
     private javax.swing.JButton jBlimpar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -412,6 +512,10 @@ public class JDClienteframe extends javax.swing.JFrame {
     private javax.swing.JTextField jT0Id;
     private javax.swing.JTextField jT1nome;
     private javax.swing.JTextField jT2email;
+    private javax.swing.JTextField jT3logradouro;
+    private javax.swing.JTextField jT4numero;
+    private javax.swing.JTextField jT5cidade;
+    private javax.swing.JTextField jT6estado;
     private javax.swing.JLabel lblPesq;
     private javax.swing.JPanel pnlCampos;
     private javax.swing.JScrollPane scrDados;
